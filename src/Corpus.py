@@ -3,6 +3,8 @@ import pandas as pd
 from Author import Author
 from document import Document
 import re
+import numpy as np
+from math import log
 
 class Corpus:
     def __init__(self, nom):
@@ -150,6 +152,21 @@ class Corpus:
 
         return pd.DataFrame.from_dict(dfreq, orient='index', columns=['document_frequency'])
         
+
+
+    def build_tf_matrix(self):
+        vocab = self.vocab
+        nb_docs = len(self.id2doc)
+
+        matrix = np.zeros((nb_docs, len(vocab)))
+
+        for i, (doc_id, doc) in enumerate(self.id2doc.items()):
+            for word in doc.texte.split():
+                if word in vocab:
+                    j = vocab.index(word)
+                    matrix[i][j] += 1
+
+        return matrix
 
 
 
