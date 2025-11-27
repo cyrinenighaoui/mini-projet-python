@@ -1,16 +1,21 @@
-class document:
-    def __init__(self, titre, auteur,date,url,texte):
+class Document:
+    def __init__(self, titre, auteur, date, url, texte):
         self.titre = titre
         self.auteur = auteur
-        self.date =date
-        self.url = url 
-        self.texte=texte
+        self.date = date
+        self.url = url
+        self.texte = texte
+        self.type = "Document"
+
     def afficher(self):
         print("Titre :", self.titre)
         print("Auteur :", self.auteur)
         print("Date :", self.date)
         print("URL :", self.url)
-        print("Texte :", self.texte)    
+        print("Texte :", self.texte)
+
+    def getType(self):
+        return self.type
+
     def __str__(self):
         return f"[Document] {self.titre}"
-

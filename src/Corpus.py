@@ -1,23 +1,25 @@
 from datetime import datetime
-from Author import Author
-from document import document
 import pandas as pd
+from Author import Author
+from document import Document
+import re
 
 class Corpus:
     def __init__(self, nom):
         self.nom = nom
-        self.authors = {}     # name → Author
-        self.id2doc = {}      # id → Document
+        self.authors = {}
+        self.id2doc = {}
         self.ndoc = 0
         self.naut = 0
 
     def add_document(self, titre, auteur, date, url, texte):
-        doc = document(titre, auteur, date, url, texte)
+        doc = Document(titre, auteur, date, url, texte)
         doc_id = f"doc_{self.ndoc}"
         self.id2doc[doc_id] = doc
         self.ndoc += 1
+        author_str = str(auteur) if auteur is not None else "Unknown"
+        author_list = [a.strip() for a in author_str.split(",")]
 
-        author_list = [a.strip() for a in auteur.split(",")]
 
         for name in author_list:
             if name not in self.authors:
@@ -47,9 +49,6 @@ class Corpus:
     def __repr__(self):
         return f"<Corpus {self.nom}: {self.ndoc} documents, {self.naut} auteurs>"
 
-    # ──────────────────────────────────────────────────
-    #  SAUVEGARDE CSV
-    # ──────────────────────────────────────────────────
     def save(self, filename):
         data = []
 
@@ -60,20 +59,17 @@ class Corpus:
                 "auteur": doc.auteur,
                 "date": doc.date,
                 "url": doc.url,
-                "texte": doc.texte
+                "texte": doc.texte,
+                "type": doc.getType()
             })
 
         df = pd.DataFrame(data)
         df.to_csv(filename, sep="\t", index=False)
         print(f"Corpus sauvegardé dans {filename}")
 
-    # ──────────────────────────────────────────────────
-    #   CHARGEMENT CSV
-    # ──────────────────────────────────────────────────
     def load(self, filename):
         df = pd.read_csv(filename, sep="\t")
 
-        # Reset si on recharge
         self.id2doc = {}
         self.authors = {}
         self.ndoc = 0
@@ -89,3 +85,78 @@ class Corpus:
             )
 
         print(f"Corpus chargé depuis {filename} ({len(df)} documents)")
+
+    def afficher_sources(self):
+        for doc_id, doc in self.id2doc.items():
+            print(f"{doc_id} : {doc.getType()} - {doc.titre}")
+
+    def search(self, mot_cle):
+        pattern = re.compile(rf"\b{mot_cle}\b", re.IGNORECASE)
+        results = []
+
+        for doc_id, doc in self.id2doc.items():
+            if pattern.search(doc.texte):
+                results.append((doc_id, doc))
+
+        return results
+
+    def concorde(self, mot_cle, window=30):
+        pattern = re.compile(rf"(.{{0,{window}}})\b({mot_cle})\b(.{{0,{window}}})", re.IGNORECASE)
+        concordance_list = []
+
+        for doc_id, doc in self.id2doc.items():
+            matches = re.findall(pattern, doc.texte)
+
+            for left, mot, right in matches:
+                concordance_list.append((left.strip(), mot, right.strip(), doc_id))
+
+        return concordance_list
+    
+    def nettoyer_texte(self):
+        #mise en minuscule , remplacement des passage a la ligne , remplacer les ponctuation et chiffres a l'aide d expression reguliere 
+            for doc_id, doc in self.id2doc.items():
+                texte = doc.texte.lower()
+                texte = texte.replace('\n', ' ').replace('\r', ' ')
+                texte = re.sub(r'[^\w\s]', ' ', texte)
+                texte = re.sub(r'\d+', ' ', texte)
+                texte = re.sub(r'\s+', ' ', texte).strip()
+                doc.texte = texte
+
+    def build_vocab(self):
+        vocab = set()
+
+        for doc in self.id2doc.values():
+            vocab.update(doc.texte.split())
+
+        self.vocab = sorted(vocab)
+        return self.vocab
+
+    def term_frequency(self):
+        freq = {}
+
+        for doc in self.id2doc.values():
+            for mot in doc.texte.split():
+                freq[mot] = freq.get(mot, 0) + 1
+
+        return pd.DataFrame.from_dict(freq, orient='index', columns=['term_frequency'])
+
+
+    
+    def document_frequency(self):
+        dfreq = {}
+
+        for mot in self.vocab:
+            dfreq[mot] = sum(1 for doc in self.id2doc.values() if mot in doc.texte.split())
+
+        return pd.DataFrame.from_dict(dfreq, orient='index', columns=['document_frequency'])
+        
+
+
+
+    class Corpus:
+        _instance = None  # attribut de classe
+
+        def __new__(cls, *args, **kwargs):
+            if cls._instance is None:
+                cls._instance = super(Corpus, cls).__new__(cls)
+            return cls._instance
