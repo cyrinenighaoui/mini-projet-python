@@ -1,0 +1,6 @@
+flask
+pandas
+numpy
+matplotlib
+pickle-mixin
+tqdm

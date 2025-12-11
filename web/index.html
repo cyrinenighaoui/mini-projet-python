@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Corpus Explorer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+
+<div class="navbar">
+    <button class="tab-button active" onclick="openTab('search')">🔍 Recherche</button>
+    <button class="tab-button" onclick="openTab('analysis')">📊 Analyse</button>
+    <button class="tab-button" onclick="openTab('about')">ℹ️ À propos</button>
+</div>
+
+<!-- ================= TAB 1 : RECHERCHE ================= -->
+<div id="search" class="tab-content" style="display:block;">
+    <div id="wrapper" class="wrapper mode-center">
+
+        <div class="left-panel">
+            <h1>Moteur de recherche – Corpus US</h1>
+
+            <label>Mot clé :</label>
+            <input id="query" type="text" value="america">
+
+            <label>Top k :</label>
+            <input id="k" type="number" value="5" min="1" max="20">
+
+            <label>Auteur :</label>
+            <select id="author"></select>
+
+            <label>Date :</label>
+            <select id="date"></select>
+
+            <button onclick="search()">Rechercher</button>
+        </div>
+
+        <div class="right-panel" id="results-panel" style="display:none;">
+            <h2>Résultats</h2>
+            <div id="results"></div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= TAB 2 : ANALYSE ================= -->
+<div id="analysis" class="tab-content">
+
+    <h1>📊 Analyse temporelle</h1>
+
+    <label>Mot à analyser :</label>
+    <input id="mot-analyse" type="text" value="america">
+
+    <button onclick="getEvolution()">Afficher l'évolution</button>
+
+    <canvas id="chart-evolution" style="margin-top:20px;"></canvas>
+
+</div>
+
+
+<!-- ================= TAB 3 : A PROPOS ================= -->
+<div id="about" class="tab-content">
+    <h1>ℹ️ À propos</h1>
+
+    <p>
+        Ce projet a été réalisé par <strong>Cyrine Nighaoui</strong> dans le cadre 
+        d’un travail d’exploration textuelle appliqué aux discours politiques américains.
+        L’application combine plusieurs fonctionnalités avancées d’analyse de texte :
+    </p>
+
+    <ul>
+        <li> Un moteur de recherche <strong>TF-IDF</strong> permettant d’identifier les discours les plus pertinents.</li>
+        <li> Une interface de recherche interactive avec <strong>filtres par auteur et par date</strong>.</li>
+        <li>📊 Un module d’analyse temporelle pour visualiser l’évolution d’un mot-clé dans le temps.</li>
+    </ul>
+
+    <p>
+        L’objectif de cette plateforme est d’offrir un outil <strong>simple, intuitif et efficace</strong> 
+        pour parcourir un corpus volumineux et en extraire des insights pertinents.
+    </p>
+</div>
+
+
+<script src="script.js"></script>
+</body>
+</html>
