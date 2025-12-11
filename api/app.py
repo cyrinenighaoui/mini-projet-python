@@ -1,16 +1,36 @@
 from flask import Flask, request, jsonify, send_from_directory
 import pandas as pd
 import pickle
+import os
 import sys
 
-sys.path.append("../src")
+# ---------------------------
+# Fixer la racine du projet
+# ---------------------------
+BASE_DIR = "/app"   # IMPORTANT : fonctionne dans Docker
+
+# Ajouter src au PYTHONPATH
+sys.path.append(os.path.join(BASE_DIR, "src"))
 
 from Corpus import Corpus
 
-app = Flask(__name__, static_folder="../web", static_url_path="")
+# ---------------------------
+# Initialiser Flask
+# ---------------------------
+app = Flask(
+    __name__,
+    static_folder=os.path.join(BASE_DIR, "web"),
+    static_url_path="/static"
+)
 
-# Charger le corpus
-df = pd.read_csv("../notebooks/discours_US.csv", sep="\t")
+# ---------------------------
+# Charger les données
+# ---------------------------
+DATA_PATH = os.path.join(BASE_DIR, "notebooks", "discours_US.csv")
+ENGINE_PATH = os.path.join(BASE_DIR, "notebooks", "engine.pkl")
+
+df = pd.read_csv(DATA_PATH, sep="\t")
+
 corpus = Corpus("discours_US")
 for _, row in df.iterrows():
     corpus.add_document(
@@ -21,14 +41,20 @@ for _, row in df.iterrows():
         texte=row["text"]
     )
 
-with open("../notebooks/engine.pkl", "rb") as f:
+with open(ENGINE_PATH, "rb") as f:
     engine = pickle.load(f)
 
-# ------------------ ROUTES HTML ------------------
+# ---------------------------
+# ROUTES HTML
+# ---------------------------
 
 @app.route("/")
 def home():
-    return send_from_directory("../web", "index.html")
+    return send_from_directory(os.path.join(BASE_DIR, "web"), "index.html")
+
+@app.route("/static/<path:path>")
+def static_files(path):
+    return send_from_directory(os.path.join(BASE_DIR, "web"), path)
 
 @app.route("/filters")
 def filters():
@@ -36,7 +62,9 @@ def filters():
     dates = ["Toutes"] + sorted(list(df["date"].unique()))
     return jsonify({"authors": authors, "dates": dates})
 
-# ------------------ API SEARCH ------------------
+# ---------------------------
+# API : SEARCH
+# ---------------------------
 
 @app.route("/search", methods=["POST"])
 def search():
@@ -60,32 +88,39 @@ def search():
 
     return jsonify(results.head(k).to_dict(orient="records"))
 
-# ------------------ API EVOLUTION ------------------
+# ---------------------------
+# API : EVOLUTION
+# ---------------------------
 
 @app.route("/evolution", methods=["POST"])
 def evolution():
-    data = request.json
-    mot = data.get("mot", "").lower()
+    data = request.get_json(force=True)
+    mot = data.get("mot", "").lower().strip()
 
     freq = {}
+
     for doc_id, doc in corpus.id2doc.items():
+        # convertir proprement la date en année
         year = pd.to_datetime(doc.date, errors="coerce").year
-        if year is None:
-            continue
+        if pd.isna(year):
+            continue  # si date pourrie, on saute
 
-        count = doc.texte.lower().split().count(mot)
-        freq[year] = freq.get(year, 0) + count
+        year = int(year)
 
+        # compter le mot dans le texte
+        tokens = doc.texte.lower().split()
+        count = tokens.count(mot)
+
+        if count > 0:
+            freq[year] = freq.get(year, 0) + count
+
+    # transformer en liste triée pour le JSON
     out = [{"year": y, "freq": freq[y]} for y in sorted(freq.keys())]
     return jsonify(out)
 
-# ------------------ STATIC FILES (LAST!!) ------------------
-
-@app.route("/<path:path>")
-def static_proxy(path):
-    return send_from_directory("../web", path)
-
-# ------------------ RUN ------------------
+# ---------------------------
+# FLASK RUN
+# ---------------------------
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)

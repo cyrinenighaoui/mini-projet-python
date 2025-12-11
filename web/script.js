@@ -69,34 +69,73 @@ function openTab(tabName) {
     event.target.classList.add("active");
 }
 async function getEvolution() {
+    const motInput = document.getElementById("mot-analyse");
+    const mot = motInput.value.trim();
 
-    const mot = document.getElementById("mot-analyse").value;
+    if (!mot) {
+        alert("Merci de saisir un mot à analyser 😊");
+        motInput.focus();
+        return;
+    }
 
-    let response = await fetch("http://127.0.0.1:5000/evolution", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ mot })
-    });
+    try {
+        const response = await fetch("/evolution", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mot })
+        });
 
-    let data = await response.json();
-
-    const years = data.map(d => d.year);
-    const freqs = data.map(d => d.freq);
-
-    if (window.myChart) window.myChart.destroy();
-
-    const ctx = document.getElementById("chart-evolution");
-    window.myChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: years,
-            datasets: [{
-                label: `Fréquence du mot "${mot}"`,
-                data: freqs,
-                borderColor: "#5a8dee",
-                borderWidth: 3,
-                fill: false
-            }]
+        if (!response.ok) {
+            console.error("Erreur HTTP /evolution :", response.status, response.statusText);
+            alert("Erreur côté serveur pour /evolution.");
+            return;
         }
-    });
+
+        const data = await response.json();
+        console.log("Données d'évolution reçues :", data);
+
+        if (!data.length) {
+            alert(`Aucune occurrence de "${mot}" trouvée dans le corpus.`);
+            if (window.myChart) {
+                window.myChart.destroy();
+                window.myChart = null;
+            }
+            return;
+        }
+
+        const years = data.map(d => d.year);
+        const freqs = data.map(d => d.freq);
+
+        // détruire l’ancien graphique si besoin
+        if (window.myChart) {
+            window.myChart.destroy();
+        }
+
+        const ctx = document.getElementById("chart-evolution").getContext("2d");
+        window.myChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: years,
+                datasets: [{
+                    label: `Fréquence du mot "${mot}"`,
+                    data: freqs,
+                    borderColor: "#5a8dee",
+                    borderWidth: 3,
+                    tension: 0.2,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: "Année" } },
+                    y: { title: { display: true, text: "Fréquence" }, beginAtZero: true }
+                }
+            }
+        });
+
+    } catch (err) {
+        console.error("Erreur JS dans getEvolution :", err);
+        alert("Erreur côté navigateur pour l'analyse temporelle.");
+    }
 }
