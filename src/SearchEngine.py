@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from math import log
+from tqdm import tqdm
 
 class SearchEngine:
 
@@ -38,7 +39,7 @@ class SearchEngine:
                 query_vec[self.corpus.vocab.index(w)] += 1
 
         scores = []
-        for i, (doc_id, doc) in enumerate(self.corpus.id2doc.items()):
+        for i, (doc_id, doc) in tqdm(enumerate(self.corpus.id2doc.items()), total=len(self.corpus.id2doc)):
             score = self.cosine(query_vec, self.matrix[i])
             scores.append((doc_id, doc.titre, score))
 
