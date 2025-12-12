@@ -106,6 +106,7 @@ Docker Desktop doit être **installé et en cours d’exécution**.
 cd projet_python_cours
 docker run -p 5000:5000 corpus-app
 
+```
 
 ### 🛠️ Alternative – Exécution locale sans Docker
 
