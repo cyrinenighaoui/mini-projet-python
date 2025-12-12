@@ -72,7 +72,7 @@ Il permet :
 - une exploration claire des résultats,
 - une **analyse temporelle** de l’évolution d’un mot dans les discours.
 
-👉 **Notebook recommandé pour tester concrètement le moteur de recherche**, sans recalcul coûteux.
+👉 **Notebook qui permet de  tester concrètement le moteur de recherche**, sans recalcul coûteux.
 
 ---
 
