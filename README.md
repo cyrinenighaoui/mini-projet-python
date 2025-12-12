@@ -25,7 +25,7 @@ Un environnement **Python 3.9+** est requis, ainsi que les bibliothèques suivan
 
 ```bash
 pip install pandas numpy scikit-learn matplotlib ipywidgets flask
-
+```
 ---
 
 ## 📓 Organisation des notebooks
