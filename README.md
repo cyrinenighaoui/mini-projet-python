@@ -2,7 +2,7 @@
 
 **Réalisé par :** Cyrine Nighaoui  
 
-Ce projet présente la **conception et l’implémentation d’un moteur de recherche textuel** basé sur des techniques de **Traitement Automatique du Langage Naturel (TAL / NLP)**, appliquées à un corpus de discours politiques et de documents thématiques.  
+Ce projet présente la **conception et l’implémentation d’un moteur de recherche textuel** basé sur des techniques de **Traitement Automatique du Langage Naturel **, appliquées à un corpus de discours politiques .
 En complément des notebooks demandés, une **interface web entièrement dockerisée** a été développée afin de proposer une utilisation plus concrète et intuitive du moteur.
 
 ---
