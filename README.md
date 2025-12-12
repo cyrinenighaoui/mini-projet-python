@@ -2,7 +2,7 @@
 
 **Réalisé par :** Cyrine Nighaoui  
 
-Ce projet présente la **conception et l’implémentation d’un moteur de recherche textuel** basé sur des techniques de **Traitement Automatique du Langage Naturel (TAL / NLP)**, appliquées à un corpus de discours politiques et de documents thématiques.  
+Ce projet présente la **conception et l’implémentation d’un moteur de recherche textuel** basé sur des techniques de **Traitement Automatique du Langage Naturel **, appliquées à un corpus de discours politiques .
 En complément des notebooks demandés, une **interface web entièrement dockerisée** a été développée afin de proposer une utilisation plus concrète et intuitive du moteur.
 
 ---
@@ -15,6 +15,17 @@ Le projet s’articule autour de :
 - Une **interface web interactive** via une API Flask
 - Un **déploiement Docker**, ne nécessitant aucune installation locale (hors Docker Desktop)
 
+---
+
+## ⚙️ Dépendances et installations nécessaires
+
+### Exécution via les notebooks ou en local (sans Docker)
+
+Un environnement **Python 3.9+** est requis, ainsi que les bibliothèques suivantes :
+
+```bash
+pip install pandas numpy scikit-learn matplotlib ipywidgets flask
+```
 ---
 
 ## 📓 Organisation des notebooks
@@ -61,7 +72,7 @@ Il permet :
 - une exploration claire des résultats,
 - une **analyse temporelle** de l’évolution d’un mot dans les discours.
 
-👉 **Notebook recommandé pour tester concrètement le moteur de recherche**, sans recalcul coûteux.
+👉 **Notebook qui permet de  tester concrètement le moteur de recherche**, sans recalcul coûteux.
 
 ---
 
@@ -95,4 +106,17 @@ Docker Desktop doit être **installé et en cours d’exécution**.
 cd projet_python_cours
 docker run -p 5000:5000 corpus-app
 
+```
+
+### 🛠️ Alternative – Exécution locale sans Docker
+
+Si Docker ne fonctionne pas sur l’ordinateur, il est possible d’exécuter l’interface web **directement en local**.
+
+Dans ce cas, se placer sur le commit **interface web**, puis s’assurer d’avoir un environnement Python fonctionnel ainsi que les dépendances nécessaires (Flask, HTML, CSS, JavaScript).  
+
+Ensuite, se positionner dans projet_python_cours_api/api :
+
+```bash
+cd projet_python_cours/api
+python app.py
 
