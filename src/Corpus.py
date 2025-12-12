@@ -13,7 +13,13 @@ class Corpus:
         self.id2doc = {}
         self.ndoc = 0
         self.naut = 0
+    _instance = None  # attribut de classe
 
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(Corpus, cls).__new__(cls)
+        return cls._instance
+    
     def add_document(self, titre, auteur, date, url, texte):
         doc = Document(titre, auteur, date, url, texte)
         doc_id = f"doc_{self.ndoc}"
@@ -115,7 +121,6 @@ class Corpus:
         return concordance_list
     
     def nettoyer_texte(self):
-        #mise en minuscule , remplacement des passage a la ligne , remplacer les ponctuation et chiffres a l'aide d expression reguliere 
             for doc_id, doc in self.id2doc.items():
                 texte = doc.texte.lower()
                 texte = texte.replace('\n', ' ').replace('\r', ' ')
@@ -170,10 +175,3 @@ class Corpus:
 
 
 
-    class Corpus:
-        _instance = None  # attribut de classe
-
-        def __new__(cls, *args, **kwargs):
-            if cls._instance is None:
-                cls._instance = super(Corpus, cls).__new__(cls)
-            return cls._instance

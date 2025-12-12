@@ -27,7 +27,9 @@ class SearchEngine:
 
 
     def cosine(self, a, b):
-        return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + 1e-10)
+        return np.dot(a, b) / (
+            np.linalg.norm(a) * np.linalg.norm(b) + 1e-10
+            )
 
 
     def search(self, query, top=10):
