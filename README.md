@@ -1,4 +1,4 @@
-# 🔎 Projet NLP – Moteur de recherche & exploration de corpus
+# 🔎 Projet  – Moteur de recherche & exploration de corpus
 
 **Réalisé par :** Cyrine Nighaoui  
 
