@@ -2,7 +2,7 @@
 
 **Réalisé par :** Cyrine Nighaoui  
 
-Ce projet présente la **conception et l’implémentation d’un moteur de recherche textuel** basé sur des techniques de **Traitement Automatique du Langage Naturel **, appliquées à un corpus de discours politiques .
+Ce projet présente la **conception et l’implémentation d’un moteur de recherche textuel** , appliquées à un corpus de discours politiques .
 En complément des notebooks demandés, une **interface web entièrement dockerisée** a été développée afin de proposer une utilisation plus concrète et intuitive du moteur.
 
 ---
@@ -11,7 +11,7 @@ En complément des notebooks demandés, une **interface web entièrement dockeri
 
 Le projet s’articule autour de :
 
-- **Trois notebooks Jupyter**, couvrant l’ensemble du pipeline NLP
+- **Trois notebooks Jupyter**, couvrant l’ensemble du pipeline 
 - Une **interface web interactive** via une API Flask
 - Un **déploiement Docker**, ne nécessitant aucune installation locale (hors Docker Desktop)
 
@@ -86,7 +86,6 @@ En complément des notebooks, une **interface web** a été développée afin d�
 - Interface simple et intuitive
 - Aucune installation Python requise pour l’utilisateur
 
----
 
 ##  Lancer l’application web avec Docker
 
@@ -104,6 +103,7 @@ Docker Desktop doit être **installé et en cours d’exécution**.
 
 ```bash
 cd projet_python_cours
+docker build -t corpus-app .
 docker run -p 5000:5000 corpus-app
 
 ```
