@@ -47,7 +47,7 @@ python -m venv .venv
 #### 2️⃣ Installation des dépendances
 
 ```bash
-pip install pandas numpy scikit-learn matplotlib ipywidgets flask praw xmltodict certifi notebook ipykernel
+pip install -r requirements.txt
 ```
 
 ---
@@ -57,7 +57,7 @@ pip install pandas numpy scikit-learn matplotlib ipywidgets flask praw xmltodict
 Directement via **VS Code** en sélectionnant le kernel :
 
 ```
-Python 3.11 (mini-projet)
+Python 3.11 (.venv)
 ```
 
 ---
