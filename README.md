@@ -17,15 +17,64 @@ Le projet s’articule autour de :
 
 ---
 
-## ⚙️ Dépendances et installations nécessaires
+## ⚙️ Dépendances et installation
 
-### Exécution via les notebooks ou en local (sans Docker)
+### Environnement requis
 
-Un environnement **Python 3.9+** est requis, ainsi que les bibliothèques suivantes :
+* **Python 3.9+** (testé et validé avec **Python 3.11.9**)
+* `pip`
+* **Environnement virtuel recommandé (`venv`)**
+* ⚠️ **Anaconda n’est pas supporté** (risques de conflits de dépendances)
+
+---
+
+### Installation (exécution via notebooks ou en local)
+
+#### 1️⃣ Création et activation de l’environnement virtuel
 
 ```bash
-pip install pandas numpy scikit-learn matplotlib ipywidgets flask
+python -m venv .venv
 ```
+
+**Windows**
+
+```bash
+.\.venv\Scripts\activate
+```
+
+---
+
+#### 2️⃣ Installation des dépendances
+
+```bash
+pip install --upgrade pip
+pip install pandas numpy scikit-learn matplotlib ipywidgets flask praw xmltodict certifi notebook ipykernel
+```
+
+---
+
+#### 3️⃣ Lancement des notebooks
+
+```bash
+jupyter notebook
+```
+
+Ou directement via **VS Code** en sélectionnant le kernel :
+
+```
+Python 3.11 (mini-projet)
+```
+
+---
+
+### Remarque importante
+
+Si vous rencontrez des erreurs de type `ModuleNotFoundError` ou des conflits avec `pandas`,
+assurez-vous que :
+
+* le notebook utilise le **kernel lié à `.venv`**
+* Anaconda n’est pas utilisé pour exécuter le projet
+
 ---
 
 ## 📓 Organisation des notebooks
