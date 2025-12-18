@@ -28,7 +28,7 @@ Le projet s’articule autour de :
 
 ---
 
-### Installation (exécution via notebooks ou en local)
+### Installation 
 
 #### 1️⃣ Création et activation de l’environnement virtuel
 
