@@ -144,10 +144,9 @@ En complément des notebooks, une **interface web** a été développée afin d�
 
 Avant de lancer l’application, se placer dans le **dossier principal du projet** (`projet_python_cours`).  
 Docker Desktop doit être **installé et en cours d’exécution**.
-Se placer à la racine du projet :
+**Se placer à la racine du projet**:
 
 ```bash
-cd projet_python_cours
 docker build -t corpus-app .
 docker run -p 5000:5000 corpus-app
 
